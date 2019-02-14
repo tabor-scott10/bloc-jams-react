@@ -42,11 +42,21 @@ class Album extends Component {
     if (this.state.isPlaying && isSameSong) {
       this.pause();
     } else {
-       if (!isSameSong) { this.setSong(song); }  
+       if (!isSameSong) { this.setSong(song); }
       this.play();
     }
   }
 
+
+    playButton(e) {
+      console.log('playButton executed!')
+
+      }
+
+
+    returnNumber(e) {
+      console.log('returnNumber executed!')
+    }
 
 
 
@@ -71,11 +81,12 @@ class Album extends Component {
           <tbody>
           {
             this.state.album.songs.map( (song, index) =>
-          <div>
-            <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
+          <div className="song-details">
+            <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={(e) => this.playButton(e)} onMouseLeave={(e) => this.returnNumber(e)}>
               <td>{index = 1 + index}</td>
               <td>{song.title}</td>
               <td>{song.duration}</td>
+
             </tr>
           </div>
         )}
