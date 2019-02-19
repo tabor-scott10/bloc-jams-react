@@ -15,7 +15,8 @@ class Album extends Component {
       album: album,
       currentSong: album.songs[0],
       isPlaying: false,
-      isHovered: false
+      isHovered: false,
+      isPaused: false
      };
 
      this.audioElement = document.createElement('audio');
@@ -30,7 +31,7 @@ class Album extends Component {
 
      pause() {
        this.audioElement.pause()
-       this.setState({ isPlaying: false });
+       this.setState({ isPlaying: false, isPaused: true });
      }
 
      setSong(song) {
@@ -40,12 +41,15 @@ class Album extends Component {
 
      handleSongClick(song) {
     const isSameSong = this.state.currentSong === song;
+    console.log('handleSongClick')
     if (this.state.isPlaying && isSameSong) {
       this.pause();
     } else {
        if (!isSameSong) { this.setSong(song); }
       this.play();
+
     }
+    this.setState({ isPaused: true})
   }
 
 
@@ -86,11 +90,18 @@ class Album extends Component {
           {
             this.state.album.songs.map( (song, index) =>
           <div className="song-details">
-            <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={(e) => this.playButton(e)} onMouseLeave={(e) => this.returnNumber(e)}>
-              {this.state.isHovered  && !this.state.isPlaying ? <td><i class="icon ion-md-play"></i></td> : null}
-              {!this.state.isHovered && !this.state.isPlaying ? <td>{index = 1 + index}</td> : null }
-              {this.state.isPlaying ? <td><i class="icon ion-md-pause"></i></td> : null}
-            
+            <tr className="song" key={ index } onClick={() => this.handleSongClick(song)} onMouseEnter={(e) => this.playButton(e)} onMouseLeave={(e) => this.returnNumber(e)}>
+              {!this.state.isHovered && !this.state.isPlaying && !this.state.isPaused ? <td>{index = 1 + index}</td> : null }
+              {this.state.isHovered && !this.state.isPlaying ? <td><i class="icon ion-md-play"></i></td> : null}
+              {this.state.isHovered && this.state.isPlaying ? <td><i class="icon ion-md-pause"></i></td> : null}
+              {this.state.isPlaying && !this.state.isHovered ? <td><i class="icon ion-md-pause"></i></td> : null}
+              {!this.state.isHovered && !this.state.isPlaying && this.state.isPaused ? <td><i class="icon ion-md-play"></i></td> : null }
+
+
+
+
+
+
 
 
 
