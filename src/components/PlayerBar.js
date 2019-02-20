@@ -6,7 +6,7 @@ class PlayerBar extends Component {
        <section className="player-bar">
        <section id="buttons">
           <button id="previous" onClick={this.props.handlePrevClick}>
-            <i class="icon ion-md-pause"></i>
+            <i class="icon ion-md-skip-backward"></i>
           </button>
           <button id="play-pause" onClick={this.props.handleSongClick}>
             {this.props.isPlaying ? <i class="icon ion-md-pause"></i> : <td><i class="icon ion-md-play"></i></td>}
