@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
+import PlayerBar from './PlayerBar';
 
 
 
@@ -52,6 +53,13 @@ class Album extends Component {
     this.setState({ isPaused: true})
   }
 
+    handlePrevClick() {
+      const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
+      const newIndex = Math.max(0, currentIndex - 1);
+      const newSong = this.state.album.songs[newIndex];
+      this.setSong(newSong);
+      this.play();
+    }
 
     playButton(e) {
       console.log('playButton executed!')
@@ -96,32 +104,18 @@ class Album extends Component {
               {this.state.isHovered && this.state.isPlaying ? <td><i class="icon ion-md-pause"></i></td> : null}
               {this.state.isPlaying && !this.state.isHovered ? <td><i class="icon ion-md-pause"></i></td> : null}
               {!this.state.isHovered && !this.state.isPlaying && this.state.isPaused ? <td><i class="icon ion-md-play"></i></td> : null }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <td>{song.title}</td>
               <td>{song.duration}</td>
-
             </tr>
           </div>
         )}
           </tbody>
         </table>
+        <PlayerBar isPlaying={this.state.isPlaying}
+         currentSong={this.state.currentSong}
+         handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+         handlePrevClick={() => this.handlePrevClick()}
+        />
      </section>
     );
   }
