@@ -16,8 +16,8 @@ class Album extends Component {
       album: album,
       currentSong: album.songs[0],
       isPlaying: false,
-      isHovered: false,
-      isPaused: false
+      isPaused: false,
+      currentlyHoveredSong: null
      };
 
      this.audioElement = document.createElement('audio');
@@ -61,22 +61,46 @@ class Album extends Component {
       this.play();
     }
 
-    playButton(e) {
+    handleNextClick() {
+      const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
+      const newIndex = function (currentIndex) {
+        if (currentIndex > this.state.album.songs.length) {
+          return
+        } else {
+          return currentIndex + 1
+        };
+      }
+      const newSong = this.state.album.songs[newIndex];
+      this.setSong(newSong);
+      this.play();
+
+    }
+
+    playButton(song) {
       console.log('playButton executed!')
-    this.setState({ isHovered: true })
+    this.setState({ currentlyHoveredSong: song })
     }
 
 
     returnNumber(e) {
       console.log('returnNumber executed!')
-      this.setState({ isHovered: false })
+      this.setState({ currentlyHoveredSong: null })
     }
 
 
 
 
   render() {
+   const noSongActivity = !this.state.currentlyHoveredSong && !this.state.isPlaying && !this.state.isPaused;
+   const hoveredNotPlaying = this.state.currentlyHoveredSong && !this.state.isPlaying;
+   const hoveredPlaying = this.state.currentlyHoveredSong && this.state.isPlaying;
+   const notHoveredPlaying = this.state.isPlaying && !this.state.currentlyHoveredSong;
+   const isPlaying = hoveredPlaying || notHoveredPlaying
+   const notHoveredPaused = !this.state.currentlyHoveredSong && !this.state.isPlaying && this.state.isPaused;
+   const pauseButton = <td><i class="icon ion-md-pause"></i></td>;
+   const playButton = <td><i class="icon ion-md-play"></i></td>;
 
+      // <td>{index = 1 + index}</td> song number!
 
     return (
       <section className="album">
@@ -96,18 +120,79 @@ class Album extends Component {
           </colgroup>
           <tbody>
           {
-            this.state.album.songs.map( (song, index) =>
-          <div className="song-details">
-            <tr className="song" key={ index } onClick={() => this.handleSongClick(song)} onMouseEnter={(e) => this.playButton(e)} onMouseLeave={(e) => this.returnNumber(e)}>
-              {!this.state.isHovered && !this.state.isPlaying && !this.state.isPaused ? <td>{index = 1 + index}</td> : null }
-              {this.state.isHovered && !this.state.isPlaying ? <td><i class="icon ion-md-play"></i></td> : null}
-              {this.state.isHovered && this.state.isPlaying ? <td><i class="icon ion-md-pause"></i></td> : null}
-              {this.state.isPlaying && !this.state.isHovered ? <td><i class="icon ion-md-pause"></i></td> : null}
-              {!this.state.isHovered && !this.state.isPlaying && this.state.isPaused ? <td><i class="icon ion-md-play"></i></td> : null }
+            this.state.album.songs.map( (song, index) => {
+          const youHoverASong = this.state.currentlyHoveredSong === song
+          const currentlyPlayingSong = this.state.currentSong === song
+          const notTheHoveredSong = !this.state.currentlyHoveredSong === song
+          return <div className="song-details">
+            <tr className="song" key={ index } onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.playButton(song)} onMouseLeave={(e) => this.returnNumber(e)}>
+
+            { youHoverASong && !this.state.isPlaying ? playButton : <td>{index = 1 + index}</td> }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <td>{song.title}</td>
               <td>{song.duration}</td>
             </tr>
-          </div>
+          </div> }
         )}
           </tbody>
         </table>
@@ -115,6 +200,7 @@ class Album extends Component {
          currentSong={this.state.currentSong}
          handleSongClick={() => this.handleSongClick(this.state.currentSong)}
          handlePrevClick={() => this.handlePrevClick()}
+         handleNextClick={() => this.handleNextClick()}
         />
      </section>
     );
